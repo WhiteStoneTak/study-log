@@ -17,7 +17,6 @@ milestone: 'Week-00'
 - **English / TOEFL**:  
   -  
   - 
-- **Meta**: Commit today’s study log to GitHub and auto-close the Issue with `closes #NN`
 
 ---
 
