@@ -4,7 +4,7 @@ about: Reflect daily learning
 title: 2025-06-00 Study Record
 labels: 'daily-log'
 assignees: ''
-milestone: 'Week-00'
+milestone: 'Week-00 Milestones'
 ---
 
 ## 🎯 Goals for 2025-06-00
