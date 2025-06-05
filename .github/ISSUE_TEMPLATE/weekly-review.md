@@ -2,8 +2,9 @@
 name: Weekly Review
 about: Reflect weekly learning
 title: Week-00-Review
-labels: ''
+labels: 'weekly-review'
 assignees: ''
+milestone: 'week-01'
 
 ---
 
