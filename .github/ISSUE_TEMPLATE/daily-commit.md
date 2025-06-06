@@ -30,7 +30,7 @@ milestone: 'week-01 Milestones'
 - 
 - 
 
-### English / TOEFL (05m)
+### English / TOEFL (00m)
 - 
 - 
 
