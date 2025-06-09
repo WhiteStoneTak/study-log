@@ -1,0 +1,94 @@
+# 📚 study-log
+
+Personal learning repository for 白石 拓海 (Takumi Shiraishi), tracking daily progress for university entrance prep and professional certifications.
+
+![GitHub repo size](https://img.shields.io/github/repo-size/WhiteStoneTak/study-log)
+![GitHub last commit](https://img.shields.io/github/last-commit/WhiteStoneTak/study-log)
+
+> **Mission:** Build a transparent, data‑driven study habit that combines physics, math, English (TOEFL), and IT Passport preparation.
+
+---
+
+## 🌟 What’s inside
+
+```
+study-log/
+├── logs/                  # Daily & weekly Markdown logs
+│   ├── 2025-06-05.md
+│   └── ...
+├── physics/               # C++/Python simulations & notes
+├── math/                  # Practice scripts, notebooks
+├── it-passport/           # Wrong‑answer sheets, summaries
+├── assets/                # Images for README / notes
+└── .github/
+    ├── ISSUE_TEMPLATE/    # Daily log template & review template
+    └── workflows/         # GitHub Actions (stats badge, CI checks)
+```
+
+---
+
+## 🚀 Daily Workflow
+
+1. **Morning** – open a new Issue from the *Daily Study Log* template.
+2. **Work sessions** – commit code or notes; use `closes #ISSUE_NUMBER` in the commit message.
+3. **Evening** – push final commit and close the Issue; update energy & time metrics.
+4. **Weekly** – open a *Week‑XX Review* Issue, close all daily Issues, and close the Milestone.
+
+### Commit message convention
+
+```
+feat(physics): add projectile simulation (closes #34)
+fix(math): correct trig solution (refs #56)
+docs(log): 2025‑06‑09 study record (closes #78)
+```
+
+---
+
+## 🗂️ Issue Templates & Milestones
+
+| Template            | Purpose                  | Auto‑assigned milestone |
+| ------------------- | ------------------------ | ----------------------- |
+| **Daily Study Log** | Plans & logs for one day | Current Week            |
+| **Week‑XX Review**  | Weekly reflection & KPIs | Current Week            |
+
+Milestones are named `Week‑NN (YYYY‑MM‑DD ▶ YY‑MM‑DD)` and provide a burn‑down chart via GitHub Insights.
+
+---
+
+## 📈 Study Metrics
+
+This repository uses:
+
+* **GitHub Insights** – closed Issues vs. open.
+* **WakaTime badge** – coding time (automatic via GitHub Actions).
+* **Custom Python script** – converts `logs/` to a CSV and generates graphs (run `python tools/stats.py`).
+
+---
+
+## 🛠️ Development Environment
+
+* **GitHub Codespaces** – pre‑configured `.devcontainer.json` with `g++`, `python3`, `clang-format`.
+* **Local** – clone and install deps:
+
+```bash
+git clone https://github.com/WhiteStoneTak/study-log.git
+cd study-log
+# optional: python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+---
+
+## 🔖 License
+
+All learning materials and notes are ©2025 Takumi Shiraishi. Code is MIT‑licensed unless specified.
+
+---
+
+## 🙌 Acknowledgements
+
+* [AtCoder](https://atcoder.jp/) for problem sets.
+* [Eigo‑Duke](https://www.eigo-duke.com/) for vocabulary drilling.
+* [ITパスポート過去問道場](https://www.itpassportsiken.com/) for practice questions.
+
+> “Small, daily improvements over time lead to stunning results.” – Robin Sharma
