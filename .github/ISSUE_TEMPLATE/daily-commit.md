@@ -4,7 +4,7 @@ about: Reflect daily learning
 title: 2025-06-00 Study Record
 labels: 'daily-log'
 assignees: ''
-milestone: 'week-01 Milestones'
+milestone: 'week-02 Milestones'
 ---
 
 ## 🎯 Goals for 2025-06-00
@@ -15,6 +15,9 @@ milestone: 'week-01 Milestones'
   - 
   - 
 - **English / TOEFL**:  
+  -  
+  - 
+- **Information Technology**:  
   -  
   - 
 
@@ -31,6 +34,10 @@ milestone: 'week-01 Milestones'
 - 
 
 ### English / TOEFL (00m)
+- 
+- 
+
+### Information Technology (00m)
 - 
 - 
 
