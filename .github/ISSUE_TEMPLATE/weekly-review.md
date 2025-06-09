@@ -4,7 +4,7 @@ about: Reflect weekly learning
 title: Week-00-Review
 labels: 'weekly-review'
 assignees: ''
-milestone: 'week-01 Milestones'
+milestone: 'week-02 Milestones'
 
 ---
 
