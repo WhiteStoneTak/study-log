@@ -14,35 +14,45 @@ Personal learning repository for 白石 拓海 (Takumi Shiraishi), tracking dail
 
 ```
 study-log/
-├── logs/                        # Study records
-│   ├── daily/                   # Daily Markdown logs: YYYY-MM-DD.md
-│   │   ├── 2025-06-09.md
-│   │   └── …
-│   └── weekly/                  # Weekly reviews: YYYY-WNN-review.md
-│       ├── 2025-W23-review.md
-│       └── …
-├── physics/                     # C++ / Python simulations & notes
-│   └── …
-├── math/                        # Practice scripts, notebooks
-│   └── …
-├── it-passport/                 # Wrong-answer sheets, summaries
-│   └── …
-├── assets/                      # Images for README / notes
-│   └── …
 ├── .github/
-│   ├── ISSUE_TEMPLATE/          # Daily-log & week-review issue forms
-│   │   ├── daily-log.yml
-│   │   └── week-review.yml
-│   ├── PULL_REQUEST_TEMPLATE.md # PR checklist
-│   └── workflows/               # GitHub Actions (stats badge, CI, etc.)
-│       └── stats.yml
+│   ├── ISSUE_TEMPLATE/          # Issue & PR templates
+│   │   ├── daily-commit.md
+│   │   └── weekly-review.md
+│   ├── workflows/
+│   │   └── stats.yml            # GitHub Actions – auto-stats
+│   └── PULL_REQUEST_TEMPLATE.md
+│
+├── logs/
+│   ├── daily/                   # Daily Markdown logs: YYYY-MM-DD.md
+│   │   ├── 2025-06-05.md
+│   │   ├── 2025-06-06.md
+│   │   └── 2025-06-07.md
+│   └── weekly/                  # Weekly reviews: YYYY-WNN-review.md
+│       └── 2025-W23.md
+│
+├── stats/                       # Auto-generated CSV & charts
+│   ├── daily_minutes.csv
+│   ├── weekly_minutes.csv
+│   └── pies/
+│       ├── daily/
+│       └── weekly/
+│
+├── tools/
+│   └── stats.py                 # Stats generator script
+│
+├── physics/                     # C++ / Python simulations & notes
+├── math/                        # Practice notebooks, scripts
+├── it-passport/                 # Wrong-answer sheets, summaries
+├── assets/                      # Images for README / notes
+│
 ├── CODE_OF_CONDUCT.md
 ├── CONTRIBUTING.md
 ├── SECURITY.md
-├── LICENSE                       # MIT
+├── LICENSE                      # MIT
 ├── README.md
 ├── .gitignore
-└── requirements.txt              # Python deps for stats scripts
+└── requirements.txt             # (optional) Python deps – e.g. matplotlib
+
 
 ```
 
