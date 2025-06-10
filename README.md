@@ -13,16 +13,36 @@ Personal learning repository for 白石 拓海 (Takumi Shiraishi), tracking dail
 
 ```
 study-log/
-├── logs/                  # Daily & weekly Markdown logs
-│   ├── 2025-06-05.md
-│   └── ...
-├── physics/               # C++/Python simulations & notes
-├── math/                  # Practice scripts, notebooks
-├── it-passport/           # Wrong‑answer sheets, summaries
-├── assets/                # Images for README / notes
-└── .github/
-    ├── ISSUE_TEMPLATE/    # Daily log template & review template
-    └── workflows/         # GitHub Actions (stats badge, CI checks)
+├── logs/                        # Study records
+│   ├── daily/                   # Daily Markdown logs: YYYY-MM-DD.md
+│   │   ├── 2025-06-09.md
+│   │   └── …
+│   └── weekly/                  # Weekly reviews: YYYY-WNN-review.md
+│       ├── 2025-W23-review.md
+│       └── …
+├── physics/                     # C++ / Python simulations & notes
+│   └── …
+├── math/                        # Practice scripts, notebooks
+│   └── …
+├── it-passport/                 # Wrong-answer sheets, summaries
+│   └── …
+├── assets/                      # Images for README / notes
+│   └── …
+├── .github/
+│   ├── ISSUE_TEMPLATE/          # Daily-log & week-review issue forms
+│   │   ├── daily-log.yml
+│   │   └── week-review.yml
+│   ├── PULL_REQUEST_TEMPLATE.md # PR checklist
+│   └── workflows/               # GitHub Actions (stats badge, CI, etc.)
+│       └── stats.yml
+├── CODE_OF_CONDUCT.md
+├── CONTRIBUTING.md
+├── SECURITY.md
+├── LICENSE                       # MIT
+├── README.md
+├── .gitignore
+└── requirements.txt              # Python deps for stats scripts
+
 ```
 
 ---
