@@ -27,7 +27,8 @@ study-log/
 │   └── …
 ├── it-passport/                 # Wrong-answer sheets, summaries
 │   └── wrong/               
-│       └── 2023A-042.md
+│       ├── 2023A-042.md
+│       └── …
 ├── assets/                      # Images for README / notes
 │   └── …
 ├── .github/
