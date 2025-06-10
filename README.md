@@ -14,45 +14,36 @@ Personal learning repository for 白石 拓海 (Takumi Shiraishi), tracking dail
 
 ```
 study-log/
-├── .github/
-│   ├── ISSUE_TEMPLATE/          # Issue & PR templates
-│   │   ├── daily-commit.md
-│   │   └── weekly-review.md
-│   ├── workflows/
-│   │   └── stats.yml            # GitHub Actions – auto-stats
-│   └── PULL_REQUEST_TEMPLATE.md
-│
-├── logs/
+├── logs/                        # Study records
 │   ├── daily/                   # Daily Markdown logs: YYYY-MM-DD.md
-│   │   ├── 2025-06-05.md
-│   │   ├── 2025-06-06.md
-│   │   └── 2025-06-07.md
+│   │   ├── 2025-06-09.md
+│   │   └── …
 │   └── weekly/                  # Weekly reviews: YYYY-WNN-review.md
-│       └── 2025-W23.md
-│
-├── stats/                       # Auto-generated CSV & charts
-│   ├── daily_minutes.csv
-│   ├── weekly_minutes.csv
-│   └── pies/
-│       ├── daily/
-│       └── weekly/
-│
-├── tools/
-│   └── stats.py                 # Stats generator script
-│
+│       ├── 2025-W23-review.md
+│       └── …
 ├── physics/                     # C++ / Python simulations & notes
-├── math/                        # Practice notebooks, scripts
+│   └── …
+├── math/                        # Practice scripts, notebooks
+│   └── …
 ├── it-passport/                 # Wrong-answer sheets, summaries
+│   └── wrong/               
+│       └── 2023A-042.md
 ├── assets/                      # Images for README / notes
-│
+│   └── …
+├── .github/
+│   ├── ISSUE_TEMPLATE/          # Daily-log & week-review issue forms
+│   │   ├── daily-log.yml
+│   │   └── week-review.yml
+│   ├── PULL_REQUEST_TEMPLATE.md # PR checklist
+│   └── workflows/               # GitHub Actions (stats badge, CI, etc.)
+│       └── stats.yml
 ├── CODE_OF_CONDUCT.md
 ├── CONTRIBUTING.md
 ├── SECURITY.md
-├── LICENSE                      # MIT
+├── LICENSE                       # MIT
 ├── README.md
 ├── .gitignore
-└── requirements.txt             # (optional) Python deps – e.g. matplotlib
-
+└── requirements.txt              # Python deps for stats scripts
 
 ```
 
@@ -131,3 +122,6 @@ All learning materials and notes are ©2025 Takumi Shiraishi. Code is MIT‑lic
 
 ### 🥧 Latest Subject Mix
 ![Subject mix](./stats/pies/weekly/2025-W23_pie.png)
+
+### 🥧 IT-Passport Weak Point Chart
+![ITP pie](./stats/itp_pie.png)
