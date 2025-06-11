@@ -38,8 +38,8 @@ study-log/
 │   └── workflows/               # GitHub Actions (stats badge, CI, etc.)
 │       └── stats.yml
 ├── tools/
-│  ├── stats.py
-│  └── itp_stats.py
+│   ├── stats.py
+│   └── itp_stats.py
 ├── CODE_OF_CONDUCT.md
 ├── CONTRIBUTING.md
 ├── SECURITY.md
