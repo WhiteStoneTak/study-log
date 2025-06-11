@@ -3,6 +3,11 @@
 # ─────────────────────────────────────────────
 name: Daily Stats Update
 
+permissions:
+  contents: write    # allow git push
+  # packages: write  # (if you ever need to push ghcr images)
+  # issues: write    # (if you plan to auto-open issues)
+
 on:
   # Run every day at 03:00 UTC
   schedule:
