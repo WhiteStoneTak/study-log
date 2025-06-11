@@ -4,7 +4,7 @@ Personal learning repository for 白石 拓海 (Takumi Shiraishi), tracking dail
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/WhiteStoneTak/study-log)
 ![GitHub last commit](https://img.shields.io/github/last-commit/WhiteStoneTak/study-log)
-![total hours](https://img.shields.io/badge/total hours-16.7h-blue)
+![total hours](https://img.shields.io/badge/total hours-19.7h-blue)
 
 > **Mission:** Build a transparent, data‑driven study habit that combines physics, math, English (TOEFL), and IT Passport preparation.
 
