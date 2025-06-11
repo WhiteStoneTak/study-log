@@ -125,10 +125,16 @@ All learning materials and notes are ©2025 Takumi Shiraishi. Code is MIT‑lic
 ---
 
 ### 📊 Weekly Trend
-![Weekly study time](./stats/weekly_chart.png)
+<p align="center">
+  <img src="./stats/weekly_chart.png" alt="Weekly study time">
+</p>
 
 ### 🥧 Latest Subject Mix
-![Subject mix](./stats/pies/weekly/2025-W23_pie.png)
+<p align="center">
+  <img src="./stats/pies/weekly/2025-W23_pie.png" alt="Subject mix">
+</p>
 
 ### 🥧 IT-Passport Weak Point Chart
-![ITP pie](./stats/itp_pie.png)
+<p align="center">
+  <img text-align="center" src="./stats/itp_pie.png" alt="ITP pie">
+</p>
