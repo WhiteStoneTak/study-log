@@ -1,0 +1,57 @@
+# ─────────────────────────────────────────────
+# GitHub Actions – Daily Stats Update Workflow
+# ─────────────────────────────────────────────
+name: Daily Stats Update
+
+on:
+  # Run every day at 03:00 UTC
+  schedule:
+    - cron: '0 3 * * *'
+  # Allow manual runs from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Check out the repository
+      - uses: actions/checkout@v4
+
+      # 2️⃣ Set up Python 3.11
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # 3️⃣ Install dependencies if requirements.txt exists
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          fi
+
+      # 4️⃣ Run main study statistics
+      - name: Generate study statistics
+        run: |
+          python tools/stats.py
+
+      # 5️⃣ Run IT-Passport statistics
+      - name: Generate IT-Passport stats
+        run: |
+          python tools/itp_stats.py
+
+      # 6️⃣ Commit and push only when files have changed
+      - name: Commit & push if changed
+        run: |
+          git config --global user.name  "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add stats || true
+          git add README.md || true
+          if ! git diff --cached --quiet; then
+            git commit -m "chore(stats): auto-update $(date -u '+%Y-%m-%d')"
+            git push
+          else
+            echo "No changes to commit."
+          fi
