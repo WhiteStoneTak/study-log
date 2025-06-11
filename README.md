@@ -27,17 +27,19 @@ study-log/
 │   └── …
 ├── it-passport/                 # Wrong-answer sheets, summaries
 │   └── wrong/               
-│       ├── 2023A-042.md
-│       └── …
+│       └── 2023A-042.md
 ├── assets/                      # Images for README / notes
 │   └── …
 ├── .github/
 │   ├── ISSUE_TEMPLATE/          # Daily-log & week-review issue forms
-│   │   ├── daily-log.yml
-│   │   └── week-review.yml
+│   │   ├── daily-log.md
+│   │   └── week-review.md
 │   ├── PULL_REQUEST_TEMPLATE.md # PR checklist
 │   └── workflows/               # GitHub Actions (stats badge, CI, etc.)
 │       └── stats.yml
+├── tools/
+│  ├── stats.py
+│  └── itp_stats.py
 ├── CODE_OF_CONDUCT.md
 ├── CONTRIBUTING.md
 ├── SECURITY.md
