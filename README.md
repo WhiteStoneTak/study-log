@@ -1,10 +1,13 @@
-# 📚 study-log
-
-Personal learning repository for 白石 拓海 (Takumi Shiraishi), tracking daily progress for university entrance prep and professional certifications.
-
-![GitHub repo size](https://img.shields.io/github/repo-size/WhiteStoneTak/study-log)
-![GitHub last commit](https://img.shields.io/github/last-commit/WhiteStoneTak/study-log)
-![total hours](https://img.shields.io/badge/total hours-19.7h-blue)
+<h1 align="center">📚 study-log</h1>
+<p align="center">
+Personal learning repository for 白石 拓海 (Takumi Shiraishi), <br>
+tracking daily progress for university entrance prep and professional certifications.<br>
+</p>
+<p align="center">
+  <img src="https://img.shields.io/github/repo-size/WhiteStoneTak/study-log" alt="GitHub repo size">
+  <img src="https://img.shields.io/github/last-commit/WhiteStoneTak/study-log" alt="GitHub last commit">
+  <img src="https://img.shields.io/badge/total hours-19.7h-blue" alt="total hours">
+</p>
 
 > **Mission:** Build a transparent, data‑driven study habit that combines physics, math, English (TOEFL), and IT Passport preparation.
 
@@ -26,8 +29,9 @@ study-log/
 ├── math/                        # Practice scripts, notebooks
 │   └── …
 ├── it-passport/                 # Wrong-answer sheets, summaries
-│   └── wrong/               
-│       └── 2023A-042.md
+│   └── wrong/      
+│       ├── 2023A-042.md
+│       └── …
 ├── assets/                      # Images for README / notes
 │   └── …
 ├── .github/
