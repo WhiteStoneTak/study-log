@@ -1,62 +1,99 @@
-# ─────────────────────────────────────────────
-# GitHub Actions – Daily Stats Update Workflow
-# ─────────────────────────────────────────────
+# ────────────────────────────────────────────────────────────────
+#  GitHub Actions · Daily Stats Update
+#  ─  Generates study metrics, graphs, and pushes them back
+# ────────────────────────────────────────────────────────────────
 name: Daily Stats Update
 
+#---------------------------------------------------------------
+# 1. Token permissions (defaults are read-only)
+#---------------------------------------------------------------
 permissions:
-  contents: write    # allow git push
-  # packages: write  # (if you ever need to push ghcr images)
-  # issues: write    # (if you plan to auto-open issues)
+  contents: write          # allow git push from the workflow
+  # packages: write        # uncomment if you later push containers
+  # issues: write          # uncomment if you auto-open issues
 
+#---------------------------------------------------------------
+# 2. Triggers
+#    • scheduled every day at 03:00 UTC
+#    • manual run via “Run workflow” button
+#---------------------------------------------------------------
 on:
-  # Run every day at 03:00 UTC
   schedule:
     - cron: '0 3 * * *'
-  # Allow manual runs from the Actions tab
   workflow_dispatch:
 
+#---------------------------------------------------------------
+# 3. Single job, Ubuntu runner
+#---------------------------------------------------------------
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Check out the repository
-      - uses: actions/checkout@v4
+    #-----------------------------------------------------------
+    # 3-1  Clone repo (depth=1 by default)
+    #-----------------------------------------------------------
+    - name: ⬇️  Checkout
+      uses: actions/checkout@v4
 
-      # 2️⃣ Set up Python 3.11
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
+    #-----------------------------------------------------------
+    # 3-2  Set up Python
+    #-----------------------------------------------------------
+    - name: 🐍  Install Python 3.11
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
 
-      # 3️⃣ Install dependencies if requirements.txt exists
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then
-            pip install -r requirements.txt
-          fi
+    #-----------------------------------------------------------
+    # 3-3  Cache pip wheels + matplotlib font cache
+    #      → first run ~1-2 min, next runs ~10-20 s
+    #-----------------------------------------------------------
+    - name: 💾  Restore pip / matplotlib cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cache/pip
+          ~/.cache/matplotlib
+        key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
 
-      # 4️⃣ Run main study statistics
-      - name: Generate study statistics
-        run: |
-          python tools/stats.py
+    #-----------------------------------------------------------
+    # 3-4  Install dependencies (matplotlib etc.)
+    #-----------------------------------------------------------
+    - name: 📦  Install Python deps
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then
+          pip install -r requirements.txt
+        fi
 
-      # 5️⃣ Run IT-Passport statistics
-      - name: Generate IT-Passport stats
-        run: |
-          python tools/itp_stats.py
+    #-----------------------------------------------------------
+    # 3-5  Generate main study stats (graphs + CSV)
+    #-----------------------------------------------------------
+    - name: 📈  Generate study statistics
+      run: python tools/stats.py
 
-      # 6️⃣ Commit and push only when files have changed
-      - name: Commit & push if changed
-        run: |
-          git config --global user.name  "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add stats || true
-          git add README.md || true
-          if ! git diff --cached --quiet; then
-            git commit -m "chore(stats): auto-update $(date -u '+%Y-%m-%d')"
-            git push
-          else
-            echo "No changes to commit."
-          fi
+    #-----------------------------------------------------------
+    # 3-6  Generate IT-Passport weak-point stats
+    #-----------------------------------------------------------
+    - name: 🥧  Generate IT-Passport stats
+      run: python tools/itp_stats.py
+
+    #-----------------------------------------------------------
+    # 3-7  Commit & push if anything changed
+    #-----------------------------------------------------------
+    - name: ⬆️  Commit & push (if changed)
+      run: |
+        git config --global user.name  "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+        # Stage auto-generated files
+        git add stats || true
+        git add README.md || true
+
+        # Commit only if there are diffed files
+        if ! git diff --cached --quiet; then
+          git commit -m "chore(stats): auto-update $(date -u +'%Y-%m-%d')"
+          git push
+        else
+          echo "No changes to commit."
+        fi
