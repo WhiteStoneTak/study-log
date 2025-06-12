@@ -132,24 +132,42 @@ for wk, mins in weekly_totals.items():
 
 # ── 7) total hours badge in README ---------------------------------
 tot_min = sum(r["minutes"] for r in daily_rows)
-badge   = f"![total hours](https://img.shields.io/badge/total hours-{tot_min/60:.1f}h-blue)\n"
+badge_img = (
+    f'  <img src="https://img.shields.io/badge/total hours-{tot_min/60:.1f}h-blue" '
+    f'alt="total hours">\n'
+)
 
 if README.exists():
-    lines = README.read_text(encoding="utf-8").splitlines(True)
-else:
+    lines = README.read_text(encoding="utf-8").splitlines(keepends=True)
+else:                                  
     lines = ["# study-log\n"]
 
 replaced = False
 for i, ln in enumerate(lines):
-    if "img.shields.io/badge/total" in ln:
-        lines[i] = badge
+    if 'alt="total hours"' in ln: 
+        indent = ln[:len(ln) - len(ln.lstrip())] 
+        lines[i] = indent + badge_img.lstrip()
         replaced = True
         break
+
 if not replaced:
+    inserted = False
     for i, ln in enumerate(lines):
-        if ln.startswith("#"):
-            lines.insert(i + 1, badge)
-            break
+        if ln.strip().startswith("<p") and "img.shields.io" in ln:
+            closing_idx = ln.find("</p>")
+            if closing_idx != -1:
+                new_ln = (
+                    ln[:closing_idx].rstrip() + "\n" +
+                    badge_img.rstrip() + ln[closing_idx:]
+                )
+                lines[i] = new_ln
+                inserted = True
+                break
+    if not inserted:
+        for i, ln in enumerate(lines):
+            if ln.startswith("#"):
+                lines.insert(i + 1, f"\n![total hours]({badge_img.split('src=\"')[1].split('\"')[0]})\n")
+                break
 
 README.write_text("".join(lines), encoding="utf-8")
 
