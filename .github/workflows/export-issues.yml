@@ -1,0 +1,101 @@
+# ────────────────────────────────────────────────────────────────
+#  GitHub Actions · Export Closed Study-Log Issues
+# ─  Turns closed Issues into Markdown files in /logs/
+# ────────────────────────────────────────────────────────────────
+name: Export Study-Log Issues
+
+permissions:
+  contents: write        # commit new MD files
+  issues: read           # query closed Issues (default, but explicit here)
+
+on:
+  schedule:
+    # daily run 03:00 UTC  → export closed daily-log issues
+    - cron: '0 3 * * *'
+    # Monday 03:00 UTC     → export closed weekly-review issues
+    - cron: '0 3 * * 1'
+  workflow_dispatch:      # manual trigger for re-runs
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+    #-----------------------------------------------------------
+    # 1) Checkout
+    #-----------------------------------------------------------
+    - uses: actions/checkout@v4
+
+    #-----------------------------------------------------------
+    # 2) Export closed Issues via Octokit
+    #-----------------------------------------------------------
+    - name: 🗂️  Export daily / weekly Issues
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const { DateTime } = require("luxon");   // luxon is bundled
+          const fs   = require("fs");
+          const path = require("path");
+
+          // helper -------------------------------------------------
+          function saveFile(relPath, content) {
+            const p = path.join(process.cwd(), relPath);
+            fs.mkdirSync(path.dirname(p), { recursive: true });
+            fs.writeFileSync(p, content, { encoding: "utf8" });
+            console.log(`✔︎ wrote ${relPath}`);
+          }
+
+          // time window -------------------------------------------
+          const now = DateTime.utc();
+          const isMondayRun = (now.weekday === 1);  // 1 = Monday
+          const since = isMondayRun
+            ? now.minus({ days: 7 })
+            : now.minus({ days: 1 });
+
+          // fetch closed Issues -----------------------------------
+          const issues = await github.paginate(
+            github.rest.issues.listForRepo,
+            {
+              owner: context.repo.owner,
+              repo:  context.repo.repo,
+              state: "closed",
+              per_page: 100,
+              since: since.toISO(),
+            }
+          );
+
+          for (const issue of issues) {
+            // only those closed within the window
+            if (Date.parse(issue.closed_at) < since.toMillis()) continue;
+
+            // match titles
+            const dailyMatch  = issue.title.match(/^(\d{4}-\d{2}-\d{2}) Study Record$/);
+            const weeklyMatch = issue.title.match(/^(\d{4}-W\d{2}) Review$/);
+
+            if (dailyMatch && !isMondayRun) {
+              const date = dailyMatch[1];               // YYYY-MM-DD
+              saveFile(`logs/daily/${date}.md`, issue.body || "");
+            }
+
+            if (weeklyMatch && isMondayRun) {
+              const isoWeek = weeklyMatch[1];           // YYYY-WNN
+              saveFile(`logs/weekly/${isoWeek}.md`, issue.body || "");
+            }
+          }
+
+    #-----------------------------------------------------------
+    # 3) Commit & push new files (if any)
+    #-----------------------------------------------------------
+    - name: ⬆️  Commit new logs
+      run: |
+        git config --global user.name  "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+        git add logs/daily/*.md logs/weekly/*.md || true
+
+        if ! git diff --cached --quiet; then
+          git commit -m "docs(log): export closed study-log issues $(date -u +'%Y-%m-%d')"
+          git push
+        else
+          echo "No new Issue logs to commit."
+        fi
