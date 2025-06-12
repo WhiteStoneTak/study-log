@@ -10,9 +10,9 @@ permissions:
 on:
   # daily 11:00 UTC  → daily study records
   schedule:
-    - cron: '1 1 * * *'
+    - cron: '0 11 * * *'
     # Monday 11:00 UTC → weekly reviews
-    - cron: '1 1 * * 1'
+    - cron: '0 11 * * 1'
   workflow_dispatch:
 
 jobs:
