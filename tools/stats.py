@@ -163,11 +163,13 @@ if not replaced:
                 lines[i] = new_ln
                 inserted = True
                 break
-    if not inserted:
-        for i, ln in enumerate(lines):
-            if ln.startswith("#"):
-                lines.insert(i + 1, f"\n![total hours]({badge_img.split('src=\"')[1].split('\"')[0]})\n")
-                break
+        if not inserted:
+            badge_url = badge_img.split('src="')[1].split('"')[0]
+            md_badge  = f"\n![total hours]({badge_url})\n"
+            for i, ln in enumerate(lines):
+                if ln.startswith("#"):
+                    lines.insert(i + 1, md_badge)
+                    break
 
 README.write_text("".join(lines), encoding="utf-8")
 
