@@ -1,5 +1,4 @@
 <h1 align="center">📚 study-log</h1>
-![total hours](https://img.shields.io/badge/total hours-23.7h-blue)
 <p align="center">
 Personal learning repository for 白石 拓海 (Takumi Shiraishi), <br>
 tracking daily progress for university entrance prep and professional certifications.<br>
@@ -7,7 +6,6 @@ tracking daily progress for university entrance prep and professional certificat
 <p align="center">
   <img src="https://img.shields.io/github/repo-size/WhiteStoneTak/study-log" alt="GitHub repo size">
   <img src="https://img.shields.io/github/last-commit/WhiteStoneTak/study-log" alt="GitHub last commit">
-![total hours](https://img.shields.io/badge/total hours-23.7h-blue)
 </p>
 
 > **Mission:** Build a transparent, data‑driven study habit that combines physics, math, English (TOEFL), and IT Passport preparation.
