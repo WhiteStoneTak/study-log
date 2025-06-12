@@ -14,12 +14,12 @@ permissions:
 
 #---------------------------------------------------------------
 # 2. Triggers
-#    • scheduled every day at 03:00 UTC
+#    • scheduled every day at 12:00 UTC
 #    • manual run via “Run workflow” button
 #---------------------------------------------------------------
 on:
   schedule:
-    - cron: '0 3 * * *'
+    - cron: '1 2 * * *'
   workflow_dispatch:
 
 #---------------------------------------------------------------
