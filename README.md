@@ -1,5 +1,8 @@
 <h1 align="center">📚 study-log</h1>
 <p align="center">
+  <img src="https://img.shields.io/badge/total hours-23.7h-blue" alt="total hours">
+</p>
+<p align="center">
 Personal learning repository for 白石 拓海 (Takumi Shiraishi), <br>
 tracking daily progress for university entrance prep and professional certifications.<br>
 </p>
