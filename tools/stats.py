@@ -1,27 +1,37 @@
 #!/usr/bin/env python3
 """
 study-log statistics generator
+──────────────────────────────
+Creates:
 
-Outputs
 • stats/daily_minutes.csv          – date, minutes
-• stats/weekly_minutes.csv         – iso_week, minutes
+• stats/weekly_minutes.csv         – ISO week, minutes
 • stats/weekly_chart.png           – line chart (minutes / week)
-• stats/pies/daily/<date>_pie.png  – subject pie chart per day
-• stats/pies/weekly/<week>_pie.png – subject pie chart per ISO week
-• logs/weekly/<week>-review.md     – created if missing
-• README.md                        – total-hours badge auto-updated
+• stats/pies/daily/YYYY-MM-DD.png  – subject pie per day
+• stats/pies/weekly/YYYY-WNN.png   – subject pie per week
+• logs/weekly/YYYY-WNN.md          – weekly review (auto-stub)
+• README.md                        – total-hours badge (auto-patched)
 """
 
+# ————————————————————————————————————————————————————————
+# Imports & helpers
+# ————————————————————————————————————————————————————————
 from pathlib import Path
-import re
-import csv
-import datetime as dt
+import csv, re, datetime as dt, time
 from collections import defaultdict
 
-# ── external: matplotlib only ───────────────────────────────────────
+import matplotlib
+matplotlib.use("Agg")                  # headless backend for CI
 import matplotlib.pyplot as plt
 
-# ── repo paths ──────────────────────────────────────────────────────
+# Simple timer for debug logs
+T0 = time.time()
+def stamp(msg: str) -> None:
+    print(f"[stats] {msg}  (+{time.time() - T0:.1f}s)")
+
+# ————————————————————————————————————————————————————————
+# Repo paths
+# ————————————————————————————————————————————————————————
 ROOT        = Path(__file__).resolve().parents[1]
 DAILY_DIR   = ROOT / "logs" / "daily"
 WEEKLY_DIR  = ROOT / "logs" / "weekly"
@@ -30,61 +40,76 @@ PIE_DAILY   = STATS_DIR / "pies" / "daily"
 PIE_WEEKLY  = STATS_DIR / "pies" / "weekly"
 README      = ROOT / "README.md"
 
-# ensure folders
 for p in (STATS_DIR, PIE_DAILY, PIE_WEEKLY, WEEKLY_DIR):
     p.mkdir(parents=True, exist_ok=True)
 
-# ── regex patterns ─────────────────────────────────────────────────
+# ————————————————————————————————————————————————————————
+# Regex patterns
+# ————————————————————————————————————————————————————————
 TOTAL_RE   = re.compile(r"Total:\s*(?:(\d+)h)?\s*(\d+)m", re.I)
 SUBJECT_RE = re.compile(r"^###\s+(.+?)\s+\((\d+)m\)", re.I | re.M)
 
-# ── containers ─────────────────────────────────────────────────────
-daily_rows            = []                       # list of dicts
-weekly_totals         = defaultdict(int)         # week -> minutes
-daily_subject_minutes = defaultdict(dict)        # date -> {sub: m}
-weekly_subject_minutes = defaultdict(lambda: defaultdict(int))
+# ————————————————————————————————————————————————————————
+# Containers
+# ————————————————————————————————————————————————————————
+daily_rows              = []                              # list[{date, minutes}]
+weekly_totals           = defaultdict(int)                # ISO week → minutes
+daily_subject_minutes   = defaultdict(dict)               # date → {subject: m}
+weekly_subject_minutes  = defaultdict(lambda: defaultdict(int))
 
-# ── 1) parse daily logs ────────────────────────────────────────────
+# ------------------------------------------------------------------
+# 1) Parse daily Markdown logs
+# ------------------------------------------------------------------
+stamp("scan daily logs")
+
 for md in sorted(DAILY_DIR.glob("20??-??-??.md")):
-    date_str = md.stem                           # YYYY-MM-DD
-    text     = md.read_text(encoding="utf-8")
+    date_str = md.stem                                    # YYYY-MM-DD
+    text = md.read_text(encoding="utf-8")
 
     m_total = TOTAL_RE.search(text)
     if not m_total:
-        continue
-    h, m = m_total.groups()
-    total_m = (int(h) if h else 0) * 60 + int(m)
+        continue                                          # skip if no Total line
+
+    hours, mins = m_total.groups()
+    total_m = (int(hours) if hours else 0) * 60 + int(mins)
     daily_rows.append({"date": date_str, "minutes": total_m})
 
-    # subject split
-    for sub, mins in SUBJECT_RE.findall(text):
-        mins = int(mins)
-        daily_subject_minutes[date_str][sub] = mins
+    # subject breakdown
+    for subj, m in SUBJECT_RE.findall(text):
+        daily_subject_minutes[date_str][subj] = int(m)
 
-    # weekly aggregation
+    # ISO-week aggregation
     y, w, _ = dt.date.fromisoformat(date_str).isocalendar()
     iso_week = f"{y}-W{w:02d}"
     weekly_totals[iso_week] += total_m
-    for sub, mins in daily_subject_minutes[date_str].items():
-        weekly_subject_minutes[iso_week][sub] += mins
 
-# if no data → exit quietly
+    for subj, m in daily_subject_minutes[date_str].items():
+        weekly_subject_minutes[iso_week][subj] += m
+
 if not daily_rows:
-    print("[stats] no daily logs found – nothing to do.")
-    exit(0)
+    print("[stats] ✗  no logs found – abort")
+    raise SystemExit(0)
 
-# ── 2) csv export ──────────────────────────────────────────────────
+# ------------------------------------------------------------------
+# 2) Export CSVs
+# ------------------------------------------------------------------
+stamp("export CSV")
+
 (STATS_DIR / "daily_minutes.csv").write_text(
     "date,minutes\n" + "\n".join(f"{r['date']},{r['minutes']}" for r in daily_rows),
     encoding="utf-8"
 )
+
 (STATS_DIR / "weekly_minutes.csv").write_text(
     "iso_week,minutes\n" + "\n".join(f"{w},{m}" for w, m in sorted(weekly_totals.items())),
     encoding="utf-8"
 )
 
-# ── 3) charts helper ───────────────────────────────────────────────
-def save_pie(data: dict, path: Path, title: str):
+# ------------------------------------------------------------------
+# 3) Helpers – pie chart generator
+# ------------------------------------------------------------------
+def save_pie(data: dict, path: Path, title: str) -> None:
+    """Save a 4×4 in pie chart if data is non-empty."""
     if not data:
         return
     labels, values = zip(*[(k, v) for k, v in data.items() if v > 0])
@@ -93,87 +118,102 @@ def save_pie(data: dict, path: Path, title: str):
     plt.title(title)
     plt.tight_layout()
     path.parent.mkdir(parents=True, exist_ok=True)
-    plt.savefig(path, dpi=150)
+    plt.savefig(path, dpi=120)
     plt.close()
 
-# ── 4) weekly line chart ───────────────────────────────────────────
+# ------------------------------------------------------------------
+# 4) Weekly line chart
+# ------------------------------------------------------------------
+stamp("generate weekly line chart")
+
 weeks   = [w for w, _ in sorted(weekly_totals.items())]
 minutes = [weekly_totals[w] for w in weeks]
+
 plt.figure(figsize=(8, 4))
 plt.plot(weeks, minutes, marker="o")
 plt.xticks(rotation=45, ha="right", fontsize=8)
 plt.ylabel("Minutes")
 plt.title("Weekly Study Time")
 plt.tight_layout()
-plt.savefig(STATS_DIR / "weekly_chart.png", dpi=150)
+plt.savefig(STATS_DIR / "weekly_chart.png", dpi=120)
 plt.close()
 
-# ── 5) subject pie charts ─────────────────────────────────────────
-#   per day
-for date_str, sub_dict in daily_subject_minutes.items():
-    save_pie(sub_dict, PIE_DAILY / f"{date_str}_pie.png", f"{date_str} subject mix")
+# ------------------------------------------------------------------
+# 5) Subject pie charts
+# ------------------------------------------------------------------
+stamp("generate pie charts")
 
-#   per week
-for wk, sub_dict in weekly_subject_minutes.items():
-    save_pie(sub_dict, PIE_WEEKLY / f"{wk}_pie.png", f"{wk} subject mix")
+# per-day (last 30 days to save CI time)
+CUTOFF_DAYS = 30
+today = dt.date.today()
 
-# ── 6) create missing weekly review markdown -----------------------
+for date_str, data in daily_subject_minutes.items():
+    if (today - dt.date.fromisoformat(date_str)).days > CUTOFF_DAYS:
+        continue
+    save_pie(data, PIE_DAILY / f"{date_str}_pie.png", f"{date_str}")
+
+# per-week
+for wk, data in weekly_subject_minutes.items():
+    save_pie(data, PIE_WEEKLY / f"{wk}_pie.png", f"{wk}")
+
+# ------------------------------------------------------------------
+# 6) Create weekly review stub if missing
+# ------------------------------------------------------------------
+stamp("create missing weekly reviews")
+
 for wk, mins in weekly_totals.items():
-    f = WEEKLY_DIR / f"{wk}.md"
-    if f.exists():
+    md_path = WEEKLY_DIR / f"{wk}.md"
+    if md_path.exists():
         continue
     year, num = wk.split("-W")
-    f.write_text(
+    md_path.write_text(
         f"# Week {num} Review ({wk})\n\n"
-        f"**Total study time:** {mins} m ({mins/60:.2f} h)\n\n"
+        f"**Total study time:** {mins} m ({mins/60:.2f} h)\n\n"
         f"> _Auto-generated on {dt.date.today()}_\n",
-        encoding="utf-8"
+        encoding="utf-8",
     )
 
-# ── 7) total hours badge in README ---------------------------------
-tot_min = sum(r["minutes"] for r in daily_rows)
+# ------------------------------------------------------------------
+# 7) Patch / insert total-hours badge in README
+# ------------------------------------------------------------------
+stamp("update README badge")
+
+tot_hours = sum(r["minutes"] for r in daily_rows) / 60
 badge_img = (
-    f'  <img src="https://img.shields.io/badge/total hours-{tot_min/60:.1f}h-blue" '
+    f'  <img src="https://img.shields.io/badge/total hours-{tot_hours:.1f}h-blue" '
     f'alt="total hours">\n'
 )
 
 if README.exists():
     lines = README.read_text(encoding="utf-8").splitlines(keepends=True)
-else:                                  
+else:
     lines = ["# study-log\n"]
 
-replaced = False
+# (a) replace existing <img alt="total hours">
 for i, ln in enumerate(lines):
-    if 'alt="total hours"' in ln: 
-        indent = ln[:len(ln) - len(ln.lstrip())] 
+    if 'alt="total hours"' in ln:
+        indent = ln[: len(ln) - len(ln.lstrip())]
         lines[i] = indent + badge_img.lstrip()
-        replaced = True
         break
-
-if not replaced:
+else:
+    # (b) insert before </p> of badge block, or fallback to Markdown badge
     inserted = False
     for i, ln in enumerate(lines):
         if ln.strip().startswith("<p") and "img.shields.io" in ln:
-            closing_idx = ln.find("</p>")
-            if closing_idx != -1:
-                new_ln = (
-                    ln[:closing_idx].rstrip() + "\n" +
-                    badge_img.rstrip() + ln[closing_idx:]
-                )
+            if "</p>" in ln:
+                new_ln = ln.replace("</p>", badge_img.rstrip() + "</p>")
                 lines[i] = new_ln
                 inserted = True
                 break
-        if not inserted:
-            badge_url = badge_img.split('src="')[1].split('"')[0]
-            md_badge  = f"\n![total hours]({badge_url})\n"
-            for i, ln in enumerate(lines):
-                if ln.startswith("#"):
-                    lines.insert(i + 1, md_badge)
-                    break
+    if not inserted:
+        badge_url = badge_img.split('src="')[1].split('"')[0]
+        lines.insert(1, f"![total hours]({badge_url})\n")
 
 README.write_text("".join(lines), encoding="utf-8")
 
+stamp("done")
+
 print(
-    f"[stats] days={len(daily_rows)}  weeks={len(weekly_totals)}  "
-    f"total={tot_min/60:.1f}h  charts: weekly line + {len(daily_subject_minutes)} daily pies + {len(weekly_subject_minutes)} weekly pies"
+    f"[stats] days={len(daily_rows)} | weeks={len(weekly_totals)} | "
+    f"total={tot_hours:.1f} h"
 )
