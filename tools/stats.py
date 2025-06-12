@@ -174,12 +174,12 @@ for wk, mins in weekly_totals.items():
     )
 
 # ------------------------------------------------------------------
-# 7) Patch / insert total-hours badge in README
+# 7) Patch / insert single total-hours badge in README
 # ------------------------------------------------------------------
 stamp("update README badge")
 
 tot_hours = sum(r["minutes"] for r in daily_rows) / 60
-badge_img = (
+html_badge = (
     f'  <img src="https://img.shields.io/badge/total hours-{tot_hours:.1f}h-blue" '
     f'alt="total hours">\n'
 )
@@ -189,25 +189,32 @@ if README.exists():
 else:
     lines = ["# study-log\n"]
 
-# (a) replace existing <img alt="total hours">
+# -- A. remove any stale Markdown badge lines ----------------------
+lines = [ln for ln in lines if not ln.lstrip().startswith("![total hours]")]
+
+# -- B. try to replace existing HTML badge ------------------------
 for i, ln in enumerate(lines):
     if 'alt="total hours"' in ln:
         indent = ln[: len(ln) - len(ln.lstrip())]
-        lines[i] = indent + badge_img.lstrip()
+        lines[i] = indent + html_badge.lstrip()
         break
 else:
-    # (b) insert before </p> of badge block, or fallback to Markdown badge
+    # -- C. insert into the centred <p> badge block ----------------
     inserted = False
     for i, ln in enumerate(lines):
         if ln.strip().startswith("<p") and "img.shields.io" in ln:
             if "</p>" in ln:
-                new_ln = ln.replace("</p>", badge_img.rstrip() + "</p>")
-                lines[i] = new_ln
+                lines[i] = ln.replace("</p>", html_badge.rstrip() + "</p>")
                 inserted = True
                 break
+    # -- D. if no badge block exists, append one at top ------------
     if not inserted:
-        badge_url = badge_img.split('src="')[1].split('"')[0]
-        lines.insert(1, f"![total hours]({badge_url})\n")
+        badge_block = (
+            '<p align="center">\n'
+            f'{html_badge.rstrip()}\n'
+            '</p>\n'
+        )
+        lines.insert(1, badge_block)
 
 README.write_text("".join(lines), encoding="utf-8")
 
