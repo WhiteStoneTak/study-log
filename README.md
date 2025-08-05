@@ -44,8 +44,7 @@ study-log/
 │   └── workflows/               # GitHub Actions (stats badge, CI, etc.)
 │       └── stats.yml
 ├── tools/
-│   ├── stats.py
-│   └── itp_stats.py
+│   └── stats.py
 ├── CODE_OF_CONDUCT.md
 ├── CONTRIBUTING.md
 ├── SECURITY.md
@@ -120,7 +119,6 @@ All learning materials and notes are ©2025 Takumi Shiraishi. Code is MIT‑lic
 
 * [AtCoder](https://atcoder.jp/) for problem sets.
 * [Eigo‑Duke](https://www.eigo-duke.com/) for vocabulary drilling.
-* [ITパスポート過去問道場](https://www.itpassportsiken.com/) for practice questions.
 
 > “Small, daily improvements over time lead to stunning results.” – Robin Sharma
 
@@ -134,9 +132,4 @@ All learning materials and notes are ©2025 Takumi Shiraishi. Code is MIT‑lic
 ### 🥧 Latest Subject Mix
 <p align="center">
   <img src="./stats/pies/weekly/2025-W23_pie.png" alt="Subject mix">
-</p>
-
-### 🥧 IT-Passport Weak Point Chart
-<p align="center">
-  <img text-align="center" src="./stats/itp_pie.png" alt="ITP pie">
 </p>
