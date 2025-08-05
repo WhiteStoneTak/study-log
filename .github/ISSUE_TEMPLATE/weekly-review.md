@@ -1,14 +1,14 @@
 ---
 name: Weekly Review
 about: Reflect weekly learning
-title: Week-00-Review
+title: Week-30-Review
 labels: 'weekly-review'
 assignees: ''
 milestone: 'week-00 Milestones'
 
 ---
 
-## Week 00 (2025-00-00 ▶ 00-00)
+## Week 30 (2025-08-00 ▶ 08-00)
 
 ### ⏱️ Total Study Time
 | Target Time | Actual Time | Achievement Rate |
