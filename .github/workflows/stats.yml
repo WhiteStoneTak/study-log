@@ -73,13 +73,7 @@ jobs:
       run: python tools/stats.py
 
     #-----------------------------------------------------------
-    # 3-6  Generate IT-Passport weak-point stats
-    #-----------------------------------------------------------
-    - name: 🥧  Generate IT-Passport stats
-      run: python tools/itp_stats.py
-
-    #-----------------------------------------------------------
-    # 3-7  Commit & push if anything changed
+    # 3-6  Commit & push if anything changed
     #-----------------------------------------------------------
     - name: ⬆️  Commit & push (if changed)
       run: |
