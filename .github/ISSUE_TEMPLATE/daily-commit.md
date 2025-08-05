@@ -43,9 +43,6 @@ milestone: 'Week-00 Milestone'
 ### 🗣️ English / TOEFL (00m)
 - 
 
-### ✍️ Essay / Japanese Writing (00m)
-- 
-
 ### 💻 Coding / Web Dev (00m)
 - 
 
