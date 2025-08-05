@@ -21,11 +21,12 @@ milestone: 'Week-00 Milestone'
 - **English / TOEFL** (Vocabulary / Writing / Sample Tests):
   - 
   - 
-- **Essay / Japanese Writing**:
-  - 
 - **Coding / Creative Projects** (Optional Reward Time):
   - 
-
+- **Daily Log**
+  - 必ず1回記録する！
+  - 翌日のゴールを作成
+    
 ---
 
 ## ⏱️ Study Log — 2025-08-00  (Total: 0h 00m)
