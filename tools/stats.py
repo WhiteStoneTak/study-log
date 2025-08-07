@@ -110,9 +110,10 @@ stamp("export CSV")
 # ------------------------------------------------------------------
 def save_pie(data: dict, path: Path, title: str) -> None:
     """Save a 4×4 in pie chart if data is non-empty."""
-    if not data:
+    filtered = [(k, v) for k, v in data.items() if v > 0]
+    if not filtered:
         return
-    labels, values = zip(*[(k, v) for k, v in data.items() if v > 0])
+    labels, values = zip(*filtered)
     plt.figure(figsize=(4, 4))
     plt.pie(values, labels=labels, autopct="%1.0f%%", startangle=90)
     plt.title(title)
