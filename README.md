@@ -3,7 +3,7 @@
 <p align="center">
   <img src="https://img.shields.io/github/repo-size/WhiteStoneTak/study-log" alt="GitHub repo size">
   <img src="https://img.shields.io/github/last-commit/WhiteStoneTak/study-log" alt="GitHub last commit">
-  <img src="https://img.shields.io/badge/total hours-36.2h-blue" alt="total hours">
+  <img src="https://img.shields.io/badge/total hours-37.7h-blue" alt="total hours">
 </p>
 
 <p align="center">
